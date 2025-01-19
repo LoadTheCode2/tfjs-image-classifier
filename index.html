@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Classifier</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"
+    ></script>
+  </head>
+  <body
+    class="grid grid-cols-2 text-yellow-300 place-items-center h-screen bg-gray-900"
+  >
+    <main
+      class="flex flex-col p-20 gap-20 justify-between items-center w-full h-screen"
+    >
+      <div class="w-full">
+        <h1 class="text-6xl font-bold mb-10">Upload</h1>
+        <div class="border-2 w-full border-yellow-300 mb-10"></div>
+      </div>
+
+      <img class="rounded hidden" id="upload-image" />
+      <label
+        class="upload-button text-gray-900 cursor-pointer p-4 bg-yellow-300 font-bold hover:bg-yellow-400 text-xl shadow-lg hover:shadow-none shadow-yellow-300 hover:translate-x-1 hover:translate-y-1 transition rounded-lg"
+      >
+        <input
+          type="file"
+          id="upload-input"
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+        />
+        Upload File
+      </label>
+    </main>
+
+    <section
+      class="text-3xl flex flex-col p-20 h-screen border-l-4 border-yellow-300 w-full"
+    >
+      <h1 class="font-bold text-6xl mb-10">Results</h1>
+      <div class="border-2 w-full border-yellow-300 mb-10"></div>
+      <ul id="predictions-list" class="list-disc"></ul>
+    </section>
+
+    <script>
+      const uploadImage = document.querySelector('img#upload-image')
+      const uploadInput = document.querySelector('input#upload-input')
+      const predictionsList = document.querySelector('ul#predictions-list')
+      uploadInput.addEventListener('change', e => {
+        if (!uploadInput.files.length) return
+        uploadImage.src = URL.createObjectURL(uploadInput.files[0])
+        uploadImage.classList.remove('hidden')
+        predictionsList.innerHTML = 'Loading...'
+
+        mobilenet.load().then(model => {
+          model.classify(uploadImage).then(predictions => {
+            if (!predictions.length) predictionsList.innerHTML = 'None Found'
+            predictionsList.innerHTML = ''
+            for (const prediction of predictions) {
+              const item = document.createElement('li')
+              item.innerText =
+                prediction.className.toUpperCase()[0] +
+                prediction.className.substring(1) +
+                ' - ' +
+                Math.round(prediction.probability * 100) +
+                '%'
+              predictionsList.appendChild(item)
+            }
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
