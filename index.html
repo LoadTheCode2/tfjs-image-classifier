@@ -52,7 +52,7 @@
         if (!uploadInput.files.length) return
         uploadImage.src = URL.createObjectURL(uploadInput.files[0])
         uploadImage.classList.remove('hidden')
-        predictionsList.innerHTML = 'Loading...'
+        predictionsList.innerHTML = '<h2 class="animate-pulse" >Loading...</h2>'
 
         mobilenet.load().then(model => {
           model.classify(uploadImage).then(predictions => {
