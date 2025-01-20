@@ -11,45 +11,37 @@
       src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"
     ></script>
   </head>
-  <body
-    class="grid grid-cols-2 text-yellow-300 place-items-center h-screen bg-gray-900"
-  >
-    <main
-      class="flex flex-col p-20 gap-20 justify-between items-center w-full h-screen"
-    >
-      <div class="w-full">
-        <h1 class="text-6xl font-bold mb-10">Upload</h1>
-        <div class="border-2 w-full border-yellow-300 mb-10"></div>
-      </div>
+  <body class="grid grid-cols-2 gap-10 p-10 text-yellow-300 bg-gray-900">
+    <h1 class="text-6xl font-bold mb-10">Upload</h1>
 
-      <img class="rounded hidden h-1/5 block" id="upload-image" />
-      <div
-        id="droppable-area"
-        class="border-yellow-300 border-4 px-40 py-20 grid place-items-center rounded-xl"
+    <h1 class="font-bold text-6xl mb-10">Results</h1>
+
+    <div
+      id="droppable-area"
+      class="border-yellow-300 mx-auto py-20 px-40 border-4 grid place-items-center rounded-xl"
+    >
+      <h2 class="font-bold text-xl mb-5">Drag and Drop</h2>
+      <h2 class="mb-5">or</h2>
+      <label
+        class="upload-button text-gray-900 cursor-pointer p-4 bg-yellow-300 font-bold hover:bg-yellow-400 text-xl shadow-lg hover:shadow-none shadow-yellow-300 hover:translate-x-1 hover:translate-y-1 transition rounded-lg"
       >
-        <h2 class="font-bold text-xl mb-5">Drag and Drop</h2>
-        <h2 class="mb-5">or</h2>
-        <label
-          class="upload-button text-gray-900 cursor-pointer p-4 bg-yellow-300 font-bold hover:bg-yellow-400 text-xl shadow-lg hover:shadow-none shadow-yellow-300 hover:translate-x-1 hover:translate-y-1 transition rounded-lg"
-        >
-          <input
-            type="file"
-            id="upload-input"
-            accept="image/jpeg,image/png,image/webp"
-            hidden
-          />
-          Upload
-        </label>
-      </div>
-    </main>
+        <input
+          type="file"
+          id="upload-input"
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+        />
+        Upload
+      </label>
+    </div>
 
-    <section
-      class="text-3xl flex flex-col p-20 h-screen border-l-4 border-yellow-300 w-full"
-    >
-      <h1 class="font-bold text-6xl mb-10">Results</h1>
-      <div class="border-2 w-full border-yellow-300 mb-10"></div>
+    <div class="w-full">
+      <img
+        class="mb-10 border-yellow-300 rounded-xl border-4 hidden"
+        id="upload-image"
+      />
       <ul id="predictions-list" class="list-disc"></ul>
-    </section>
+    </div>
 
     <script>
       const uploadImage = document.querySelector('img#upload-image')
