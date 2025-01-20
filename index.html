@@ -22,18 +22,25 @@
         <div class="border-2 w-full border-yellow-300 mb-10"></div>
       </div>
 
-      <img class="rounded hidden" id="upload-image" />
-      <label
-        class="upload-button text-gray-900 cursor-pointer p-4 bg-yellow-300 font-bold hover:bg-yellow-400 text-xl shadow-lg hover:shadow-none shadow-yellow-300 hover:translate-x-1 hover:translate-y-1 transition rounded-lg"
+      <img class="rounded hidden h-1/2" id="upload-image" />
+      <div
+        id="droppable-area"
+        class="border-yellow-300 border-4 px-40 py-20 grid place-items-center rounded-xl"
       >
-        <input
-          type="file"
-          id="upload-input"
-          accept="image/jpeg,image/png,image/webp"
-          hidden
-        />
-        Upload File
-      </label>
+        <h2 class="font-bold text-xl mb-5">Drag and Drop</h2>
+        <h2 class="mb-5">or</h2>
+        <label
+          class="upload-button text-gray-900 cursor-pointer p-4 bg-yellow-300 font-bold hover:bg-yellow-400 text-xl shadow-lg hover:shadow-none shadow-yellow-300 hover:translate-x-1 hover:translate-y-1 transition rounded-lg"
+        >
+          <input
+            type="file"
+            id="upload-input"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+          />
+          Upload
+        </label>
+      </div>
     </main>
 
     <section
@@ -48,9 +55,39 @@
       const uploadImage = document.querySelector('img#upload-image')
       const uploadInput = document.querySelector('input#upload-input')
       const predictionsList = document.querySelector('ul#predictions-list')
+      const droppableArea = document.querySelector('div#droppable-area')
+
       uploadInput.addEventListener('change', e => {
         if (!uploadInput.files.length) return
-        uploadImage.src = URL.createObjectURL(uploadInput.files[0])
+        handleFile(uploadInput.files[0])
+      })
+
+      // Utility function to prevent default browser behavior
+      function preventDefaults(e) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+
+      // Preventing default browser behavior when dragging a file over the container
+      droppableArea.addEventListener('dragover', preventDefaults)
+      droppableArea.addEventListener('dragenter', preventDefaults)
+
+      droppableArea.addEventListener('drop', e => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        // Getting the list of dragged files
+        const files = e.dataTransfer.files
+
+        // Checking if there are any files
+        if (files.length) {
+          // Processing the files for previews (next step)
+          handleFile(files[0])
+        }
+      })
+
+      function handleFile(file) {
+        uploadImage.src = URL.createObjectURL(file)
         uploadImage.classList.remove('hidden')
         predictionsList.innerHTML = '<h2 class="animate-pulse" >Loading...</h2>'
 
@@ -70,7 +107,7 @@
             }
           })
         })
-      })
+      }
     </script>
   </body>
 </html>
